@@ -4,7 +4,8 @@
 
 After checkout:
 
-- Run generate-keys.sh to create the necessary SSH keys.
+- Run `chmod +x generate-keys.sh` to change permission (at times without this, docker run command is not getting executed) 
+- Run `.\generate-keys.sh` to create the necessary SSH keys.
 - Run `docker-compose build`. This will build the necessary Docker images.
 - Run `docker-compose up`. This wil start the demo environment.
 - Run `docker exec -i -t main /bin/bash` to enter the main container.

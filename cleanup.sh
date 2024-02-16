@@ -6,7 +6,8 @@ FILTER=(
 )
 
 while read c ; do
-  docker container stop -f "$c"
+  #docker container stop -f "$c" 
+  docker container stop "$c"
 done < <( docker container ls "${FILTER[@]}" --format "{{json .ID}}" | sed 's/"//g' )
 
 while read c ; do
