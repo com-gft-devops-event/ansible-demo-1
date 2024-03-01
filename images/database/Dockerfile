@@ -4,7 +4,7 @@ RUN apt-get update -y
 RUN apt-get install -y openssh-server python3 bash sudo
 
 # copy the startup script to start sshd and postgresql
-COPY startup.sh /usr/local/bin/startup.sh
+COPY --chmod=0555 startup.sh /usr/local/bin/startup.sh
 
 # Copy the ssh server keys
 COPY ssh_host_* /etc/ssh/
