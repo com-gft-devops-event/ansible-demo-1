@@ -44,7 +44,8 @@ COPY --chown=ansible:ansible --chmod=600 id_rsa.pub /home/ansible/.ssh/id_rsa.pu
 COPY --chown=ansible:ansible demo/ /home/ansible/
 
 RUN find /home/ansible/ -type f -exec chmod a-x {} \; && \
-    chmod -R o-rwx,g-w /home/ansible/
+    chmod -R o-rwx,g-w /home/ansible/ && \
+    find /home/ansible -type f \( -name "*.py" -o -name "*.sh" \) -exec chmod a+rx {} \;
 
 RUN pipx install ansible-core
 
