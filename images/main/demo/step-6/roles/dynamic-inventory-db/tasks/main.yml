@@ -1,0 +1,30 @@
+---
+# tasks file for dynamic-inventory-db
+- name: Fetch dynamic inventory
+  command: roles/dynamic-inventory-db/files/inventory_script.py
+  register: inventory_output
+
+- name: to list output
+  debug:
+    var: inventory_output.stdout
+
+- name: Add Redis hosts to inventory
+  add_host:
+    name: "{{ host }}"
+    groups: redis
+  loop:  "{{ (inventory_output.stdout | from_json)['redis']['hosts'] }}"
+  vars:
+    host: "{{ item }}"
+
+- name: Debug after add_host
+  debug:
+    var: groups
+
+- name: Write dynamic inventory to file
+  copy:
+    content: |
+        [redis]
+        {% for host in (inventory_output.stdout | from_json)['redis']['hosts'] %}
+        {{ host }}
+        {% endfor %}
+    dest: inventory/main.yaml

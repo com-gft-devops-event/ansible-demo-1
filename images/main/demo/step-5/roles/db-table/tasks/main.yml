@@ -1,0 +1,37 @@
+---
+# tasks file for db-table
+- name: Install PostgreSQL client package
+  apt:
+    name: postgresql-client
+    state: present
+    
+
+- name: Create table
+  command: >
+        psql -U {{ dbuser }} -d {{ dbname }} -c "
+        CREATE TABLE IF NOT EXISTS {{ table_name }} (
+          {% for column in columns %}
+          {{ column.name }} {{ column.type }}{% if not loop.last %},{% endif %}
+          {% endfor %}
+        );"
+
+- name: Check if value exists in the table and insert if not
+  command: >
+        psql -U {{ dbuser }} -d {{ dbname }} -c "
+        DO $$
+        DECLARE
+          data_count INT;
+        BEGIN
+          {% for item in data %}
+          SELECT COUNT(*) INTO data_count FROM {{ table_name }} WHERE hostname = '{{ item.hostname }}' AND groups = '{{ item.groups }}';
+          IF data_count = 0 THEN
+            INSERT INTO {{ table_name }} ({{ columns | map(attribute='name') | join(', ') }})
+            VALUES (
+              '{{ item.hostname }}',
+              '{{ item.groups }}'
+            );
+          END IF;
+          {% endfor %}
+        END
+        $$;
+        "

@@ -1,0 +1,5 @@
+---
+- name: Create PostgreSQL table and insert data
+  hosts: database
+  roles:
+    - db-table

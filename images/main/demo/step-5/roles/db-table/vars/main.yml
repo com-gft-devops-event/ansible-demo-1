@@ -1,0 +1,15 @@
+---
+# vars file for db-table
+dbname: postgres
+dbuser: postgres
+table_name: hosts
+columns:
+  - name: hostname
+    type: varchar(255)
+  - name: groups
+    type: varchar(255)
+data:
+  - hostname: ansible-demo-1-worker_3-1
+    groups: redis
+  - hostname: ansible-demo-1-worker_3-2
+    groups: redis

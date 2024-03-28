@@ -1,0 +1,11 @@
+---
+- name: Update Dynamic Inventory from Database
+  hosts: localhost
+  roles:
+    - dynamic-inventory-db
+
+- name: Example playbook using dynamic inventory
+  hosts: redis
+  tasks:
+    - name: Example task
+      command: apk info -e -a
